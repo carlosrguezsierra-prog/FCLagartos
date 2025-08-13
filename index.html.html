@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lagartos FC - Club de Fútbol</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d5016 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #4CAF50;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .logo::before {
+            content: "🦎";
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: #4CAF50;
+            transform: translateY(-2px);
+        }
+
+        .nav-menu a.active {
+            color: #4CAF50;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #4CAF50;
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after,
+        .nav-menu a.active::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Home Page */
+        .home-page {
+            display: block;
+        }
+
+        .contact-page {
+            display: none;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%234CAF50" width="1200" height="800" opacity="0.1"/><circle cx="200" cy="200" r="100" fill="%23ffffff" opacity="0.05"/><circle cx="1000" cy="600" r="150" fill="%23ffffff" opacity="0.03"/></svg>');
+            background-size: cover;
+            background-position: center;
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.3) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #4CAF50, #81C784);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #4CAF50, #66BB6A);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+            background: linear-gradient(45deg, #66BB6A, #4CAF50);
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section:nth-child(even) {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #4CAF50;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(45deg, #4CAF50, #81C784);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(76, 175, 80, 0.1);
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            color: #4CAF50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* Contact Page */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.02);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            text-align: center;
+            padding: 2rem;
+            border-top: 3px solid #4CAF50;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form {
+                padding: 2rem;
+                margin: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">Lagartos FC</div>
+            <ul class="nav-menu">
+                <li><a href="#" onclick="showPage('home')" class="active" id="home-link">Inicio</a></li>
+                <li><a href="#" onclick="showPage('contact')" id="contact-link">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Página de Inicio -->
+        <div id="home-page" class="home-page">
+            <section class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <h1>Lagartos FC</h1>
+                        <p>Más que un equipo, una familia. Donde la pasión por el fútbol cobra vida en cada jugada.</p>
+                        <a href="#" class="cta-button" onclick="showPage('contact')">Únete al Equipo</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <h2>¿Por qué Lagartos FC?</h2>
+                    <div class="features">
+                        <div class="feature-card fade-in">
+                            <span class="feature-icon">⚽</span>
+                            <h3>Excelencia Deportiva</h3>
+                            <p>Entrenamiento profesional y técnicas avanzadas para desarrollar el máximo potencial de cada jugador.</p>
+                        </div>
+                        <div class="feature-card fade-in">
+                            <span class="feature-icon">🏆</span>
+                            <h3>Espíritu Ganador</h3>
+                            <p>Como los lagartos, somos ágiles, resistentes y siempre listos para adaptarnos a cualquier desafío.</p>
+                        </div>
+                        <div class="feature-card fade-in">
+                            <span class="feature-icon">🤝</span>
+                            <h3>Comunidad Unida</h3>
+                            <p>Una familia deportiva que apoya a cada miembro dentro y fuera del campo de juego.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <h2>Nuestros Valores</h2>
+                    <div class="features">
+                        <div class="feature-card fade-in">
+                            <span class="feature-icon">💪</span>
+                            <h3>Fortaleza</h3>
+                            <p>Construimos carácter fuerte y determinación inquebrantable en cada jugador.</p>
+                        </div>
+                        <div class="feature-card fade-in">
+                            <span class="feature-icon">🎯</span>
+                            <h3>Precisión</h3>
+                            <p>Cada pase, cada tiro, cada movimiento ejecutado con la precisión de un lagarto cazando.</p>
+                        </div>
+                        <div class="feature-card fade-in">
+                            <span class="feature-icon">🌱</span>
+                            <h3>Crecimiento</h3>
+                            <p>Desarrollo continuo tanto en habilidades futbolísticas como en valores personales.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Página de Contacto -->
+        <div id="contact-page" class="contact-page">
+            <section class="section">
+                <div class="container">
+                    <h2>Contáctanos</h2>
+                    
+                    <div class="contact-info">
+                        <div class="contact-card">
+                            <div class="contact-icon">📧</div>
+                            <h3>Email</h3>
+                            <p>info@lagartosfc.com</p>
+                            <p>entrenador@lagartosfc.com</p>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-icon">📱</div>
+                            <h3>Teléfono</h3>
+                            <p>+34 123 456 789</p>
+                            <p>+34 987 654 321</p>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-icon">📍</div>
+                            <h3>Ubicación</h3>
+                            <p>Campo Deportivo Municipal</p>
+                            <p>Av. del Deporte, 123</p>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-icon">⏰</div>
+                            <h3>Horarios</h3>
+                            <p>Entrenamientos:</p>
+                            <p>L-V: 18:00-20:00h</p>
+                            <p>S-D: 10:00-12:00h</p>
+                        </div>
+                    </div>
+
+                    <form class="contact-form fade-in">
+                        <div class="form-group">
+                            <label for="name">Nombre Completo *</label>
+                            <input type="text" id="name" name="name" placeholder="Tu nombre completo" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Teléfono</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+34 123 456 789">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="age">Edad</label>
+                            <input type="number" id="age" name="age" placeholder="Tu edad" min="5" max="99">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="position">Posición Preferida</label>
+                            <select id="position" name="position" style="width: 100%; padding: 1rem; border: 2px solid rgba(76, 175, 80, 0.3); border-radius: 10px; background: rgba(255, 255, 255, 0.1); color: white; font-size: 1rem;">
+                                <option value="">Selecciona una posición</option>
+                                <option value="portero">Portero</option>
+                                <option value="defensa">Defensa</option>
+                                <option value="centrocampista">Centrocampista</option>
+                                <option value="delantero">Delantero</option>
+                                <option value="no-seguro">No estoy seguro</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Mensaje *</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Cuéntanos sobre ti, tu experiencia en el fútbol y por qué quieres unirte a Lagartos FC..." required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="cta-button" style="width: 100%;">Enviar Mensaje</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Lagartos FC. Todos los derechos reservados. 🦎⚽</p>
+            <p>Síguenos en nuestras redes sociales para estar al día con todas las novedades del equipo.</p>
+        </div>
+    </footer>
+
+    <script>
+        function showPage(page) {
+            // Ocultar todas las páginas
+            document.getElementById('home-page').style.display = 'none';
+            document.getElementById('contact-page').style.display = 'none';
+            
+            // Quitar clase active de todos los enlaces
+            document.getElementById('home-link').classList.remove('active');
+            document.getElementById('contact-link').classList.remove('active');
+            
+            // Mostrar la página seleccionada y activar el enlace
+            if (page === 'home') {
+                document.getElementById('home-page').style.display = 'block';
+                document.getElementById('home-link').classList.add('active');
+            } else if (page === 'contact') {
+                document.getElementById('contact-page').style.display = 'block';
+                document.getElementById('contact-link').classList.add('active');
+            }
+            
+            // Scroll hacia arriba
+            window.scrollTo(0, 0);
+        }
+
+        // Manejar el envío del formulario
+        document.querySelector('.contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Obtener datos del formulario
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Simular envío exitoso
+            alert('¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto para hablar sobre tu incorporación a Lagartos FC. 🦎⚽');
+            
+            // Limpiar formulario
+            this.reset();
+        });
+
+        // Animaciones al hacer scroll
+        function handleScroll() {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        // Inicializar animaciones
+        document.querySelectorAll('.fade-in').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'all 0.8s ease-out';
+        });
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Ejecutar una vez al cargar
+    </script>
+</body>
+</html>
